@@ -6,8 +6,9 @@ import glob                 # Used for merging the JSON files
 import numpy as np          # For arrays 
 import time                 # For .sleep(x) method, execute a GET GIT API request every x seconds
 import re                   # To get the total number of commits, contributors for a repo, it's acting like 'sed' for linux
+import glob, os, shutil     # For creating twin repos folders
 
-TOKEN = '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'
+TOKEN = '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'
 starttime = time.time()
 
 
@@ -236,7 +237,30 @@ def merge_json_files():
     with open('repo_final_mined_data//mined_repo_contributors_count.json', 'w', encoding='utf-8') as file_out:
         json.dump(merged_contents_contributors_count, file_out)
 
-
+    
+def mine_git_twin_repositories():
+    # Loading categorized csv file as dataframe
+    df = pd.read_csv('repo_final_mined_data//curated_csv//original.csv')
+    repos_name = list(df['full_name'])
+    for repo in repos_name:
+        language = df.query("full_name=='"+repo+"'")["language"].iloc[0]
+        created_year = df.query("full_name=='"+repo+"'")["created_at"].str.slice(0,4).iloc[0]
+        pushed_year = df.query("full_name=='"+repo+"'")["pushed_at"].str.slice(0,4).iloc[0]
+        time.sleep(10)
+        repo_name = repo.replace('/','-')
+        urls = requests.get('https://api.github.com/search/repositories?q=created:'+created_year+'+pushed:'+pushed_year+'+langugage:'+language+'&is:public&per_page=100', headers={'Authorization': 'Bearer '+TOKEN})
+        data = urls.json()
+        print(urls.url)
+        os.mkdir('repo_final_mined_data//twin_repositories//'+repo_name)
+        with open('repo_final_mined_data//twin_repositories//'+repo_name+'//'+repo_name+'_twins_json.json', 'w') as f:
+            json.dump(data, f)
+        with open('repo_final_mined_data//twin_repositories//'+repo_name+'//'+repo_name+'_twins_json.json') as file_in:
+            data = json.load(file_in)
+            df_twin_repositories = pd.json_normalize(data)
+            df_twin_repositories_repos = df_twin_repositories.explode('items')
+            df_twin_repositories_repos = pd.json_normalize(df_twin_repositories_repos['items'])
+            df_twin_repositories_repos.to_csv('repo_final_mined_data//twin_repositories//'+repo_name+'//'+repo_name+'_twins_csv.csv')
+        pprint('twin gathered for repo: ' + repo)
 
 def mine_more_data_and_create_dataframes():
     with open('repo_final_mined_data//mined_repo_data_basic.json') as file_in:
@@ -320,7 +344,7 @@ def mine_more_data_and_create_dataframes():
             data = urls_prs.json()
             with open('repo_demographic_mined_data//more_data//pr_count//pr_type_'+pr_status+'_repo_'+repo_name+'.json', 'w') as f:
                 json.dump(data, f)
-    
+
 
     #########################################
             # SAVE RAW DATAFRAMES #
@@ -375,7 +399,6 @@ def mine_more_data_and_create_dataframes():
         data = json.load(file_in)
     df_contributors = pd.json_normalize(data)
     df_contributors.to_csv('repo_final_mined_data//raw_csv//mined_repo_contributors_count_raw.csv')
-    
 
     #########################################
         # SAVE COMBINED RAW DATAFRAMES #
@@ -423,7 +446,6 @@ def mine_more_data_and_create_dataframes():
     df_cc_final.drop_duplicates(subset='repository_url',keep='first')
     df_cc_final.to_csv('repo_final_mined_data//curated_csv//cc_final.csv')
 
-
     # Final dataframe with all fields mined + duplicated
     df_final_intermediary_raw = df_issues.merge(df_prs.merge(df_cc, on=['repository_url'], how='inner',suffixes=('_PRS','_CC')), on=['repository_url'], how='inner', suffixes = ('_ISSUES','_PRS_CC'))
     df_final_intermediary_raw['url'] = df_final_intermediary_raw['repository_url']
@@ -443,11 +465,13 @@ def mine_more_data_and_create_dataframes():
 
 
 
+
 #mine_git_repos_demographic_basic_data()
 #merge_json_files()
-#mine_more_data_and_create_dataframes()
 #mine_git_repos_programming_languages()
 #mine_users_age()
 #mine_git_repos_contributors()
 #mine_git_issues_content()
 #mine_git_prs_content()
+mine_git_twin_repositories()
+#mine_more_data_and_create_dataframes()
