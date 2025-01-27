@@ -248,7 +248,7 @@ def mine_git_twin_repositories():
         pushed_year = df.query("full_name=='"+repo+"'")["pushed_at"].str.slice(0,4).iloc[0]
         time.sleep(10)
         repo_name = repo.replace('/','-')
-        urls = requests.get('https://api.github.com/search/repositories?q=created:'+created_year+'+pushed:'+pushed_year+'+langugage:'+language+'&is:public&per_page=100', headers={'Authorization': 'Bearer '+TOKEN})
+        urls = requests.get('https://api.github.com/search/repositories?q=created:'+created_year+'+pushed:'+pushed_year+'+language:'+language+'&is:public&per_page=100', headers={'Authorization': 'Bearer '+TOKEN})
         data = urls.json()
         print(urls.url)
         os.mkdir('repo_final_mined_data//twin_repositories//'+repo_name)
