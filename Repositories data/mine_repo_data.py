@@ -9,7 +9,7 @@ import re                   # To get the total number of commits, contributors f
 import glob, os, shutil     # For creating twin repos folders
 import pathlib
 
-TOKEN = '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'
+TOKEN = 'GITHUB_TOKEN'
 starttime = time.time()
 
 
@@ -58,7 +58,7 @@ def mine_git_repos_programming_languages():
 
 def mine_git_repos_contributors():
     # Loading categorized csv file as dataframe
-    df = pd.read_csv('repo_final_mined_data//curated_csv//final_data_curated - final_data_curated_categorized.csv')
+    df = pd.read_csv('repo_final_mined_data//curated_csv//original.csv')
     repos_name = list(df['full_name'])
     for repo in repos_name:
         time.sleep(10)
@@ -241,8 +241,8 @@ def merge_json_files():
     
 def mine_git_twin_repositories():
     # Loading categorized csv file as dataframe
-    #df = pd.read_csv('repo_final_mined_data//curated_csv//original.csv')
-    #repos_name = list(df['full_name'])
+    df = pd.read_csv('repo_final_mined_data//curated_csv//original.csv')
+    repos_name = list(df['full_name'])
     for repo in repos_name:
         language = df.query("full_name=='"+repo+"'")["language"].iloc[0]
         created_year = df.query("full_name=='"+repo+"'")["created_at"].str.slice(0,4).iloc[0]
@@ -527,7 +527,56 @@ def mine_git_twin_repositories():
     df_final_curated.filter(['html_url','name','full_name','description','topics','created_at','updated_at','pushed_at',
         'size','language','stargazers_count','subscribers_count','has_issues','has_downloads','has_discussions',
         'forks_count','default_branch','private','open_issues_only','closed_issues_only','open_pull_requests','closed_pull_requests','commits_number','contributors_number','license.key','owner.type']).to_csv('repo_final_mined_data//curated_csv//baseline_repos.csv')
+    """
+    """ # Loading categorized csv file as dataframe
+    df = pd.read_csv('repo_final_mined_data//curated_csv//baseline_repos.csv')
+    repos_name = list(df['full_name'])
+    for repo in repos_name:
+        time.sleep(10)
+        repo_name = repo.replace('/','-')
+        urls = requests.get('https://api.github.com/repos/'+repo+'/contributors', headers={'Authorization': 'Bearer '+TOKEN})
+        data = urls.json()
+        with open('repo_final_mined_data//contributors//twins//'+repo_name+'_contributors_list.json', 'w') as f:
+            json.dump(data, f)
+        pprint('contributors list gathered for repo: ' + repo)
 
+    merged_contents_contributors = []
+    for f in glob.glob('repo_final_mined_data/contributors/twins//*.json'):
+        with open(f, "r") as file_in:
+            merged_contents_contributors += json.load(file_in)
+    with open("repo_final_mined_data//mined_repo_contributors_twins.json", "w") as file_out:
+        json.dump(merged_contents_contributors, file_out)
+    
+    with open('repo_final_mined_data//mined_repo_contributors_twins.json') as file_in:
+         data = json.load(file_in)
+    df_contributors = pd.json_normalize(data)
+    df_contributors.to_csv('repo_final_mined_data//curated_csv//contributors_details_twins.csv') 
+
+    # Loading categorized csv file as dataframe
+    df = pd.read_csv('repo_final_mined_data//curated_csv//contributors_details_twins.csv')
+    users_name = list(df['login'])
+    for user in users_name:
+        time.sleep(10)
+        urls = requests.get('https://api.github.com/users/'+ user, headers={'Authorization': 'Bearer '+TOKEN})
+        data = urls.json()
+        with open('repo_final_mined_data//users//'+user+'_details.json', 'w') as f:
+            json.dump(data, f)
+        pprint('details gathered for user: ' + user)
+
+    merged_contents_users = []
+    for f in glob.glob('repo_final_mined_data/users/*.json'):
+        with open(f, 'r', encoding='utf-8') as file_in:
+            for line in file_in:
+                a_dict = json.loads(line)
+                merged_contents_users.append(a_dict)
+    with open('repo_final_mined_data//mined_repo_users_details_twins.json', 'w', encoding='utf-8') as file_out:
+        json.dump(merged_contents_users, file_out)
+    
+    with open('repo_final_mined_data//mined_repo_users_details_twins.json') as file_in:
+         data = json.load(file_in)
+    users_details = pd.json_normalize(data)
+    users_details.to_csv('repo_final_mined_data//curated_csv//users_details_twins.csv')
+ 
 
 def mine_more_data_and_create_dataframes():
     with open('repo_final_mined_data//mined_repo_data_basic.json') as file_in:
