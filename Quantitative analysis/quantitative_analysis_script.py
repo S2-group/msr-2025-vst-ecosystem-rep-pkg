@@ -16,6 +16,7 @@ df_repos = pd.read_csv('CSVs Used//final_data_curated - final_data_curated_categ
 df_programming_languages = pd.read_csv('CSVs Used//only_programming_languages_used_across_categorized_repositories.csv')
 df_contributors = pd.read_csv('CSVs Used//contributors_details.csv')
 df_users = pd.read_csv('CSVs Used//users_details.csv')
+df_users_twins = pd.read_csv('CSVs Used//users_details_twins.csv')
 df_issues_content = pd.read_csv('CSVs Used//issues_content_final.csv')
 df_prs_content = pd.read_csv('CSVs Used//prs_content_final.csv')
 df_library_initial = pd.read_csv('CSVs Used//libraries_used.csv')
@@ -534,6 +535,27 @@ plt.savefig("Figures//users_age.png",bbox_inches='tight')
 plt.clf()
 
 df_users_age.to_csv("Output CSVs/users_details.csv")
+
+##### FOR TWINS #####
+plt.figure(figsize=(7,4))
+
+df_users_age = pd.DataFrame(data = df_users_twins[['login','created_at']])
+df_users_age['created_at'] = pd.to_datetime(df_users_age['created_at'].str.slice(0,10),format='%Y-%m-%d')
+df_users_age['today_at'] = datetime_object
+
+df_users_age['age_in_days'] =  (df_users_age['today_at'] - df_users_age['created_at']).dt.days
+#user_age = df_users_age.plot(x='login',y='age_in_days',kind='bar',legend=False,figsize=(100,10))
+
+user_age = sns.violinplot(data=df_users_age, y=df_users_age['age_in_days'], palette='Blues_d')
+sns.boxplot(y=df_users_age['age_in_days'], data=df_users_age, palette='Blues', width=0.3,boxprops={'zorder': 2})
+user_age.set(ylim = (0,3700))
+user_age.set(xlabel='Owners and contributors on GitHub')
+user_age.set(ylabel='Their GitHub profiles age in days')
+
+plt.savefig("Figures//users_age_twins.png",bbox_inches='tight')
+plt.clf()
+
+df_users_age.to_csv("Output CSVs/users_details_twins.csv")
 
 #############################################
 ########## TIME TO CLOSE AN ISSUE ###########
