@@ -9,12 +9,12 @@ In this work we target VST plugins, the de-facto standard for developing and pro
 
 Our findings provide a comprehensive understanding of the current state of the practice in VST plugins development, highlighting successful projects, opportunities for improvement, and future research directions for software engineering researchers.
 
-The pre-print of the study is available [here](https://www.ivanomalavolta.com/files/papers/MSR_2025.pdf)
+The pre-print of the study is available [here](https://www.ivanomalavolta.com/files/papers/MSR_2025.pdf).
 
 ## Overview of the replication package
 This replication package is structured as follows:
 
-    |--- Quantitative analysis/     The scripts utilized and the data extracted during the analysis.
+    |--- Quantitative analysis/     	The scripts utilized and the data extracted during the analysis.
     |--- Repositories data/   	    The scripts utilized and the data extracted during the mining process of VST Plugins repositories on GitHub.
  
 Each of the folders listed above are described in details in the remaining of this readme.
@@ -31,7 +31,7 @@ Each of the folders listed above are described in details in the remaining of th
 
 ### Repositories data
   
-	|--- Cloned repositories                Contains the SonarQube reports alongside the Python script responsible for cloning the repositories mentioned in the CSVs Used subfolder. 
+	|--- Cloned repositories                	Contains the SonarQube reports alongside the Python script responsible for cloning the repositories mentioned in the CSVs Used subfolder. 
         |--- CSVs Used                       	Contains the final repositories dataset as a CSV file, which was utilized only for the sole purpose of gathering the repositories' names by the "mine_repo_data.py" Python script.
         |--- SonarQube reports               	Contains the SonarQube compressed reports of all repositories. 
         |--- mine_repo_data.py               	The Python script responsible for cloning the repositories
