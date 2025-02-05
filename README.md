@@ -33,15 +33,15 @@ Repositories data
         |--- languages                       	Contains all the programming languages utilized across repositories, not just the primary one.
         |--- raw_csv                         	Contains the merged JSON files as CSV files. Those CSV files also contain out-of-scope fields but without duplicates.
         |--- raw_uncurated_csv               	Contains the merged JSON files as CSV files. Those CSV files also contain out-of-scope fields but with duplicates + empty rows.
-	|--- twin_repositories			Contains the correlated twins for each VST repository.
+	    |--- twin_repositories			Contains the correlated twins for each VST repository.
         |--- users                           	Contains the details about each user.
         |--- *.json                          	Contains the JSON files that are merged from the folder "repo_demographic_mined_data".
 	|--- repo_demographic_mined_data         	Contains the demographic repositories data utilized for the quantitative analysis, not merged, as JSON files.
         |--- more_data                       	Contains data that was additionally mined.
-             |--- commit_count               	Contains the commit count as JSON files for each repository.
-             |--- contributor_count          	Contains the contributors count as JSON files for each repository.
-             |--- in_depth_details           	Contains the in-depth details as JSON files for each repository.
-             |--- issue_count                	Contains the issues count as JSON files for each repository.
-             |--- pr_count                   	Contains the pull requests count as JSON files for each repository.
+             |--- commit_count               	Contains the commit count as JSON files for each repository and its twin.
+             |--- contributor_count          	Contains the contributors count as JSON files for each repository and its twin.
+             |--- in_depth_details           	Contains the in-depth details as JSON files for each repository and its twin.
+             |--- issue_count                	Contains the issues count as JSON files for each repository and its twin.
+             |--- pr_count                   	Contains the pull requests count as JSON files for each repository and its twin.
         |--- *.json                          	The JSON files that represent the topics utilized across repositories.
 	|--- mine_repo_data.py                   	The Python script responsible for mining the repositories demographic data through Git REST API.analysis of the contents of the repositories
