@@ -14,8 +14,8 @@ The pre-print of the study is available [here](https://www.ivanomalavolta.com/fi
 ## Overview of the replication package
 This replication package is structured as follows:
 
-    |--- Quantitative analysis/     	The scripts utilized and the data extracted during the analysis.
-    |--- Repositories data/   	    The scripts utilized and the data extracted during the mining process of VST Plugins repositories on GitHub.
+    |--- Quantitative analysis/	The scripts utilized and the data extracted during the analysis.
+    |--- Repositories data/		The scripts utilized and the data extracted during the mining process of VST Plugins repositories on GitHub.
  
 Each of the folders listed above are described in details in the remaining of this readme.
 
