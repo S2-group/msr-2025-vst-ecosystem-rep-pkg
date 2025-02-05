@@ -1,5 +1,7 @@
 # The Ecosystem of Open-Source Music Production Software – A Mining Study on the Development Practices of VST Plugins on GitHub
 
+[![DOI](https://zenodo.org/badge/927646394.svg)](https://doi.org/10.5281/zenodo.14810650)
+
 This repository contains the replication package of the following publication:
 > Bogdan Andrei, Mauricio Verano Merino, Ivano Malavolta. The Ecosystem of Open-Source Music Production Software – A Mining Study on the Development Practices of VST Plugins on GitHub. Proceedings of the 22nd international conference on Mining Software Repositories (MSR 2025).
 
