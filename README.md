@@ -33,6 +33,7 @@ Repositories data
         |--- languages                       	Contains all the programming languages utilized across repositories, not just the primary one.
         |--- raw_csv                         	Contains the merged JSON files as CSV files. Those CSV files also contain out-of-scope fields but without duplicates.
         |--- raw_uncurated_csv               	Contains the merged JSON files as CSV files. Those CSV files also contain out-of-scope fields but with duplicates + empty rows.
+	|--- twin_repositories			Contains the correlated twins for each VST repository.
         |--- users                           	Contains the details about each user.
         |--- *.json                          	Contains the JSON files that are merged from the folder "repo_demographic_mined_data".
 	|--- repo_demographic_mined_data         	Contains the demographic repositories data utilized for the quantitative analysis, not merged, as JSON files.
